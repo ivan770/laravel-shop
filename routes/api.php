@@ -14,3 +14,8 @@ use Illuminate\Http\Request;
 */
 
 Route::middleware(['auth:api', 'scope:info'])->get('/user', 'Auth\APIController@getSelf');
+
+Route::group(['middleware' => 'auth:api'], function () {
+    Route::get('/item/{id}', 'ItemController@show');
+    Route::get('/items/{id}', 'ItemController@index');
+});
