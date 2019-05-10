@@ -30,5 +30,14 @@ class AuthServiceProvider extends ServiceProvider
             $router->forAuthorization();
             $router->forAccessTokens();
         });
+
+        Passport::tokensCan([
+            'info' => 'Get account information (email, username)',
+            'payment' => 'Use payment info, charge money',
+        ]);
+
+        Passport::setDefaultScope([
+            'info',
+        ]);
     }
 }
