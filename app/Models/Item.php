@@ -12,4 +12,9 @@ class Item extends Model
     {
         return $this->belongsTo(Subcategory::class);
     }
+
+    public function users()
+    {
+        return $this->belongsToMany(User::class, 'cart_items');
+    }
 }

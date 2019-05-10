@@ -19,3 +19,7 @@ Route::group(['middleware' => 'auth:api'], function () {
     Route::get('/item/{id}', 'ItemController@show');
     Route::get('/items/{id}', 'ItemController@index');
 });
+
+Route::group(['middleware' => ['auth:api', 'scope:cart']], function () {
+    Route::resource('cart', 'CartController')->only(['index', 'store', 'destroy']);
+});

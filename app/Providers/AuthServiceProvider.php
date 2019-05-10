@@ -34,6 +34,7 @@ class AuthServiceProvider extends ServiceProvider
         Passport::tokensCan([
             'info' => 'Get account information (email, username)',
             'payment' => 'Get payment info, charge money',
+            'cart' => 'Get list of products in cart'
         ]);
 
         Passport::setDefaultScope([
