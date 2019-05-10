@@ -33,7 +33,7 @@ class AuthServiceProvider extends ServiceProvider
 
         Passport::tokensCan([
             'info' => 'Get account information (email, username)',
-            'payment' => 'Use payment info, charge money',
+            'payment' => 'Get payment info, charge money',
         ]);
 
         Passport::setDefaultScope([
