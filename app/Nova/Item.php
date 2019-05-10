@@ -2,28 +2,29 @@
 
 namespace App\Nova;
 
-use Laravel\Nova\Fields\BelongsToMany;
-use Laravel\Nova\Fields\HasMany;
+use Laravel\Nova\Fields\BelongsTo;
 use Laravel\Nova\Fields\ID;
 use Illuminate\Http\Request;
+use Laravel\Nova\Fields\Number;
 use Laravel\Nova\Fields\Text;
+use Laravel\Nova\Fields\Textarea;
 use Laravel\Nova\Http\Requests\NovaRequest;
 
-class Subcategory extends Resource
+class Item extends Resource
 {
     /**
      * The model the resource corresponds to.
      *
      * @var string
      */
-    public static $model = 'App\\Models\\Subcategory';
+    public static $model = 'App\\Models\\Item';
 
     /**
      * The single value that should be used to represent the resource when being displayed.
      *
      * @var string
      */
-    public static $title = 'name';
+    public static $title = 'id';
 
     /**
      * The columns that should be searched.
@@ -44,11 +45,11 @@ class Subcategory extends Resource
     {
         return [
             ID::make()->sortable(),
-            Text::make('Name')
-                ->sortable()
-                ->rules('required', 'max:255'),
-            BelongsToMany::make('Categories'),
-            HasMany::make('Items')
+            Text::make('Name'),
+            Textarea::make('Short description'),
+            Textarea::make('Description'),
+            Number::make('Price'),
+            BelongsTo::make('Subcategory')
         ];
     }
 
