@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Http\Requests\Address\CreateEditAddressRequest;
 use App\Http\Resources\AddressResource;
+use Illuminate\Database\Eloquent\ModelNotFoundException;
 
 class AddressController extends Controller
 {
@@ -37,8 +38,16 @@ class AddressController extends Controller
      */
     public function update(CreateEditAddressRequest $request, $id)
     {
-        $req = auth()->user()->addresses()->findOrFail($id)->update($request->validated());
-        return response()->json($req);
+        try {
+            $result = auth()->user()->addresses()->find($id);
+            if ($result == null) {
+                throw new ModelNotFoundException("Saved address with provided ID doesn't exist");
+            }
+            $result->update($request->validated());
+        } catch (\Throwable $e) {
+            return response()->json(['error' => $e->getMessage()], 400);
+        }
+        return response()->json(true);
     }
 
     /**
@@ -49,7 +58,15 @@ class AddressController extends Controller
      */
     public function destroy($id)
     {
-        $req = auth()->user()->addresses()->findOrFail($id)->delete();
-        return response()->json($req);
+        try {
+            $result = auth()->user()->addresses()->find($id);
+            if ($result == null) {
+                throw new ModelNotFoundException("Saved address with provided ID doesn't exist");
+            }
+            $result->delete();
+        } catch (\Throwable $e) {
+            return response()->json(['error' => $e->getMessage()], 400);
+        }
+        return response()->json(true);
     }
 }

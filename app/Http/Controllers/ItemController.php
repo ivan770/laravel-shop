@@ -5,29 +5,46 @@ namespace App\Http\Controllers;
 use App\Http\Resources\ItemResource;
 use App\Models\Item;
 use App\Models\Subcategory;
+use Illuminate\Database\Eloquent\ModelNotFoundException;
 
 class ItemController extends Controller
 {
     /**
      * Display a listing of the resource.
      *
-     * @return \Illuminate\Http\Response
+     * @param $id
+     * @return \Illuminate\Http\Resources\Json\AnonymousResourceCollection
      */
     public function index($id)
     {
-        $req = Subcategory::findOrFail($id)->items;
-        return ItemResource::collection($req);
+        try {
+            $result = Subcategory::find($id);
+            if ($result == null) {
+                throw new ModelNotFoundException("Subcategory with that ID doesn't exist");
+            }
+            $result = $result->items;
+        } catch (\Throwable $e) {
+            return response()->json(['error' => $e->getMessage()], 400);
+        }
+        return ItemResource::collection($result);
     }
 
     /**
      * Display the specified resource.
      *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
+     * @param int $id
+     * @return ItemResource
      */
     public function show($id)
     {
-        $req = Item::findOrFail($id);
-        return ItemResource::make($req);
+        try {
+            $result = Item::find($id);
+            if ($result == null) {
+                throw new ModelNotFoundException("Item with that ID doesn't exist");
+            }
+        } catch (\Throwable $e) {
+            return response()->json(['error' => $e->getMessage()], 400);
+        }
+        return ItemResource::make($result);
     }
 }
