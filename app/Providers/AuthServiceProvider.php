@@ -35,7 +35,8 @@ class AuthServiceProvider extends ServiceProvider
             'info' => 'Get account information (email, username)',
             'payment' => 'Get payment info, charge money',
             'cart' => 'Manage your cart (get, add, remove items)',
-            'wishlist' => 'Manage your wishlist (get, add, remove items)'
+            'wishlist' => 'Manage your wishlist (get, add, remove items)',
+            'address' => 'Manage saved addresses'
         ]);
 
         Passport::setDefaultScope([
