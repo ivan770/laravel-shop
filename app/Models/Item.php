@@ -17,4 +17,9 @@ class Item extends Model
     {
         return $this->belongsToMany(User::class, 'cart_items');
     }
+
+    public function wishes()
+    {
+        return $this->belongsToMany(User::class, 'cart_items');
+    }
 }

@@ -23,3 +23,7 @@ Route::group(['middleware' => 'auth:api'], function () {
 Route::group(['middleware' => ['auth:api', 'scope:cart']], function () {
     Route::resource('cart', 'CartController')->only(['index', 'store', 'destroy']);
 });
+
+Route::group(['middleware' => ['auth:api', 'scope:wishlist']], function () {
+    Route::resource('wishlist', 'WishlistController')->only(['index', 'store', 'destroy']);
+});
