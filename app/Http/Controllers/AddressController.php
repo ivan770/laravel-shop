@@ -45,9 +45,9 @@ class AddressController extends Controller
             }
             $result->update($request->validated());
         } catch (\Throwable $e) {
-            return response()->json(['error' => $e->getMessage()], 400);
+            return response()->json(['success' => false, 'data' => [$e->getMessage()]], 400);
         }
-        return response()->json(true);
+        return response()->json(['success' => true, 'data' => []]);
     }
 
     /**
@@ -65,8 +65,8 @@ class AddressController extends Controller
             }
             $result->delete();
         } catch (\Throwable $e) {
-            return response()->json(['error' => $e->getMessage()], 400);
+            return response()->json(['success' => false, 'data' => [$e->getMessage()]], 400);
         }
-        return response()->json(true);
+        return response()->json(['success' => true, 'data' => []]);
     }
 }

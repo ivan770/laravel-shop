@@ -24,7 +24,7 @@ class ItemController extends Controller
             }
             $result = $result->items;
         } catch (\Throwable $e) {
-            return response()->json(['error' => $e->getMessage()], 400);
+            return response()->json(['success' => false, 'data' => [$e->getMessage()]], 400);
         }
         return ItemResource::collection($result);
     }
@@ -43,7 +43,7 @@ class ItemController extends Controller
                 throw new ModelNotFoundException("Item with that ID doesn't exist");
             }
         } catch (\Throwable $e) {
-            return response()->json(['error' => $e->getMessage()], 400);
+            return response()->json(['success' => false, 'data' => [$e->getMessage()]], 400);
         }
         return ItemResource::make($result);
     }
