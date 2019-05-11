@@ -25,7 +25,7 @@ class AddressController extends Controller
      */
     public function store(CreateEditAddressRequest $request)
     {
-        return new AddressResource(auth()->user()->addresses()->create($request->validated()));
+        return AddressResource::make(auth()->user()->addresses()->create($request->validated()));
     }
 
     /**
@@ -37,7 +37,8 @@ class AddressController extends Controller
      */
     public function update(CreateEditAddressRequest $request, $id)
     {
-        return response()->json(auth()->user()->addresses()->findOrFail($id)->update($request->validated()));
+        $req = auth()->user()->addresses()->findOrFail($id)->update($request->validated());
+        return response()->json($req);
     }
 
     /**
@@ -48,6 +49,7 @@ class AddressController extends Controller
      */
     public function destroy($id)
     {
-        return response()->json(auth()->user()->addresses()->findOrFail($id)->delete());
+        $req = auth()->user()->addresses()->findOrFail($id)->delete();
+        return response()->json($req);
     }
 }

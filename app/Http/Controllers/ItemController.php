@@ -15,7 +15,8 @@ class ItemController extends Controller
      */
     public function index($id)
     {
-        return ItemResource::collection(Subcategory::findOrFail($id)->items);
+        $req = Subcategory::findOrFail($id)->items;
+        return ItemResource::collection($req);
     }
 
     /**
@@ -26,6 +27,7 @@ class ItemController extends Controller
      */
     public function show($id)
     {
-        return new ItemResource(Item::findOrFail($id));
+        $req = Item::findOrFail($id);
+        return ItemResource::make($req);
     }
 }
