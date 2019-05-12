@@ -16,7 +16,11 @@ class CartController extends Controller
      */
     public function index()
     {
-        return CartResource::collection(auth()->user()->carts);
+        $carts = auth()->user()->carts();
+        if (!$carts->count()) {
+            $carts->create();
+        }
+        return CartResource::collection($carts->get());
     }
 
     public function show($id)
@@ -32,7 +36,7 @@ class CartController extends Controller
     /**
      * Store a newly created resource in storage.
      *
-     * @param  \Illuminate\Http\Request  $request
+     * @param \Illuminate\Http\Request $request
      * @return \Illuminate\Http\Response
      */
     public function store(StoreItemRequest $request)
@@ -49,7 +53,7 @@ class CartController extends Controller
     /**
      * Remove the specified resource from storage.
      *
-     * @param  int  $id
+     * @param int $id
      * @return \Illuminate\Http\Response
      */
     public function destroy($cart_id, $id)
