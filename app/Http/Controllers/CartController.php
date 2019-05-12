@@ -22,7 +22,7 @@ class CartController extends Controller
     public function show($id)
     {
         try {
-            $cart = auth()->user()->carts()->findOrFail($id)->items()->with('item')->get();
+            $cart = auth()->user()->carts()->findOrFail($id)->items;
         } catch (ModelNotFoundException $e) {
             return response()->json(['success' => false, 'data' => [$e->getMessage()]], 400);
         }
