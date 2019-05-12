@@ -38,7 +38,7 @@ class CartController extends Controller
     public function store(StoreItemRequest $request)
     {
         try {
-            $cart = auth()->user()->carts()->findOrFail($request->input('cart_id'));
+            $cart = auth()->user()->carts()->active()->findOrFail($request->input('cart_id'));
         } catch (ModelNotFoundException $e) {
             return response()->json(['success' => false, 'data' => [$e->getMessage()]], 400);
         }
@@ -55,7 +55,7 @@ class CartController extends Controller
     public function destroy($cart_id, $id)
     {
         try {
-            $cart = auth()->user()->carts()->findOrFail($cart_id);
+            $cart = auth()->user()->carts()->active()->findOrFail($cart_id);
             $cart->items()->findOrFail($id)->delete();
         } catch (ModelNotFoundException $e) {
             return response()->json(['success' => false, 'data' => [$e->getMessage()]], 400);
