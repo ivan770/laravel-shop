@@ -3,21 +3,20 @@
 namespace App\Nova;
 
 use Laravel\Nova\Fields\BelongsTo;
+use Laravel\Nova\Fields\HasOne;
 use Laravel\Nova\Fields\ID;
 use Illuminate\Http\Request;
 use Laravel\Nova\Fields\Number;
-use Laravel\Nova\Fields\Text;
-use Laravel\Nova\Fields\Textarea;
 use Laravel\Nova\Http\Requests\NovaRequest;
 
-class Item extends Resource
+class CartLine extends Resource
 {
     /**
      * The model the resource corresponds to.
      *
      * @var string
      */
-    public static $model = 'App\\Models\\Item';
+    public static $model = 'App\\Models\\CartLine';
 
     /**
      * The single value that should be used to represent the resource when being displayed.
@@ -32,7 +31,7 @@ class Item extends Resource
      * @var array
      */
     public static $search = [
-        'id', 'name'
+        'id', 'item_id'
     ];
 
     /**
@@ -45,11 +44,8 @@ class Item extends Resource
     {
         return [
             ID::make()->sortable(),
-            Text::make('Name'),
-            Textarea::make('Short description'),
-            Textarea::make('Description'),
-            Number::make('Price'),
-            BelongsTo::make('Subcategory')
+            BelongsTo::make('Cart'),
+            BelongsTo::make('Item')
         ];
     }
 

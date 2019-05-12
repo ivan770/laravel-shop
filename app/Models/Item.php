@@ -13,9 +13,9 @@ class Item extends Model
         return $this->belongsTo(Subcategory::class);
     }
 
-    public function users()
+    public function cartlines()
     {
-        return $this->belongsToMany(User::class, 'cart_items');
+        return $this->belongsToMany(CartLine::class);
     }
 
     public function wishes()
