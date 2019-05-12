@@ -18,6 +18,7 @@ class CartLineResource extends JsonResource
             'id' => $this->id,
             'cart_id' => $this->cart_id,
             'item' => ItemResource::make($this->item),
+            'count' => $this->count
         ];
     }
 }

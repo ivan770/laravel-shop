@@ -19,6 +19,7 @@ class CreateCartLinesTable extends Migration
             $table->foreign('cart_id')->references('id')->on('carts')->onDelete('cascade');
             $table->unsignedBigInteger('item_id');
             $table->foreign('item_id')->references('id')->on('items')->onDelete('cascade');
+            $table->integer('count')->default(1);
         });
     }
 

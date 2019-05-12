@@ -42,7 +42,7 @@ class CartController extends Controller
         } catch (ModelNotFoundException $e) {
             return response()->json(['success' => false, 'data' => [$e->getMessage()]], 400);
         }
-        $item = $cart->items()->create(['item_id' => $request->input('item_id')]);
+        $item = $cart->items()->create(['item_id' => $request->input('item_id'), 'count' => $request->input('count', 1)]);
         return CartLineResource::make($item);
     }
 
