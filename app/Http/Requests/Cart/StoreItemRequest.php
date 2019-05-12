@@ -26,7 +26,7 @@ class StoreItemRequest extends FormRequest
         return [
             'cart_id' => ["required", "numeric", "exists:carts,id"],
             'item_id' => ["required", "numeric", "exists:items,id"],
-            'count' => ["numeric", "max:100"]
+            'count' => ["numeric", "max:100", "min:1"]
         ];
     }
 }
