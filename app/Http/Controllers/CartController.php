@@ -3,7 +3,9 @@
 namespace App\Http\Controllers;
 
 use App\Http\Requests\Cart\StoreItemRequest;
-use App\Http\Resources\ItemResource;
+use App\Http\Resources\CartLineResource;
+use App\Http\Resources\CartResource;
+use Illuminate\Database\Eloquent\ModelNotFoundException;
 
 class CartController extends Controller
 {
@@ -14,7 +16,17 @@ class CartController extends Controller
      */
     public function index()
     {
-        return ItemResource::collection(auth()->user()->cart);
+        return CartResource::collection(auth()->user()->carts);
+    }
+
+    public function show($id)
+    {
+        try {
+            $cart = auth()->user()->carts()->findOrFail($id)->items()->with('item')->get();
+        } catch (ModelNotFoundException $e) {
+            return response()->json(['success' => false, 'data' => [$e->getMessage()]], 400);
+        }
+        return CartLineResource::collection($cart);
     }
 
     /**
@@ -25,7 +37,13 @@ class CartController extends Controller
      */
     public function store(StoreItemRequest $request)
     {
-        return response()->json(auth()->user()->cart()->syncWithoutDetaching($request->input('id')));
+        try {
+            $cart = auth()->user()->carts()->findOrFail($request->input('cart_id'));
+        } catch (ModelNotFoundException $e) {
+            return response()->json(['success' => false, 'data' => [$e->getMessage()]], 400);
+        }
+        $item = $cart->items()->create(['item_id' => $request->input('item_id')]);
+        return CartLineResource::make($item);
     }
 
     /**
@@ -34,8 +52,14 @@ class CartController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function destroy($id)
+    public function destroy($cart_id, $id)
     {
-        return response()->json(auth()->user()->cart()->detach($id));
+        try {
+            $cart = auth()->user()->carts()->findOrFail($cart_id);
+            $cart->items()->findOrFail($id)->delete();
+        } catch (ModelNotFoundException $e) {
+            return response()->json(['success' => false, 'data' => [$e->getMessage()]], 400);
+        }
+        return response()->json(['success' => true, 'data' => []]);
     }
 }

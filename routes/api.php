@@ -21,7 +21,8 @@ Route::group(['middleware' => 'auth:api'], function () {
 });
 
 Route::group(['middleware' => ['auth:api', 'scope:cart']], function () {
-    Route::resource('cart', 'CartController')->only(['index', 'store', 'destroy']);
+    Route::resource('cart', 'CartController')->only(['index', 'show', 'store']);
+    Route::delete('/cart/{cart_id}/{id}', 'CartController@destroy');
 });
 
 Route::group(['middleware' => ['auth:api', 'scope:wishlist']], function () {

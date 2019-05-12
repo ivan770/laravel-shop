@@ -24,7 +24,8 @@ class StoreItemRequest extends FormRequest
     public function rules()
     {
         return [
-            'id' => ["required", "numeric", "exists:items,id"]
+            'cart_id' => ["required", "numeric", "exists:carts,id"],
+            'item_id' => ["required", "numeric", "exists:items,id"],
         ];
     }
 }
