@@ -36,7 +36,8 @@ class AuthServiceProvider extends ServiceProvider
             'payment' => 'Get payment info, charge money',
             'cart' => 'Manage your cart (get, add, remove items)',
             'wishlist' => 'Manage your wishlist (get, add, remove items)',
-            'address' => 'Manage saved addresses'
+            'address' => 'Manage saved addresses',
+            'oauth' => 'Manage connected OAuth providers'
         ]);
 
         Passport::setDefaultScope([
