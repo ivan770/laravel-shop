@@ -22,6 +22,11 @@ class Cart extends Model
 
     public function scopeActive($query)
     {
-        return $query->where('active', 1);
+        return $query->where('delivery_status', 0);
+    }
+
+    public function scopeNewestFirst($query)
+    {
+        return $query->orderByDesc('id');
     }
 }

@@ -17,10 +17,10 @@ class CartController extends Controller
     public function index()
     {
         $carts = auth()->user()->carts();
-        if (!$carts->count()) {
+        if (!$carts->active()->count()) {
             $carts->create();
         }
-        return CartResource::collection($carts->get());
+        return CartResource::collection(auth()->user()->carts()->newestFirst()->get());
     }
 
     public function show($id)

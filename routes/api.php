@@ -33,6 +33,10 @@ Route::group(['middleware' => ['auth:api', 'scope:address']], function () {
     Route::resource('address', 'AddressController')->only(['index', 'store', 'update', 'destroy']);
 });
 
+Route::group(['middleware' => ['auth:api', 'scope:payment'], 'prefix' => 'payment'], function () {
+    Route::post('/checkout', 'PaymentController@checkout');
+});
+
 Route::group(['middleware' => ['auth:api', 'scope:oauth', 'oauth'], 'prefix' => 'oauth'], function () {
     Route::get('/redirect/{provider}', 'Auth\APIController@redirect');
     Route::get('/callback/{provider}', 'Auth\APIController@callback');

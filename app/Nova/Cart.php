@@ -2,16 +2,16 @@
 
 namespace App\Nova;
 
+use Inspheric\Fields\Indicator;
 use Laravel\Nova\Fields\Boolean;
 use Laravel\Nova\Fields\HasMany;
 use Laravel\Nova\Fields\ID;
 use Illuminate\Http\Request;
+use Laravel\Nova\Fields\Select;
 use Laravel\Nova\Http\Requests\NovaRequest;
 
 class Cart extends Resource
 {
-    public static $displayInNavigation = false;
-
     /**
      * The model the resource corresponds to.
      *
@@ -32,7 +32,7 @@ class Cart extends Resource
      * @var array
      */
     public static $search = [
-        'id',
+        'id', 'delivery_status'
     ];
 
     /**
@@ -45,7 +45,20 @@ class Cart extends Resource
     {
         return [
             ID::make()->sortable(),
-            Boolean::make('Active'),
+            Select::make('Delivery status')->options([
+                '0' => 'Active cart',
+                '1' => 'Order in processing',
+                '2' => 'Delivery validation',
+                '3' => 'Sent to delivery service',
+                '4' => 'Order ready'
+            ])->nullable(false)->hideFromIndex()->hideFromDetail(),
+            Indicator::make('Delivery status')->labels([
+                '0' => 'Active cart',
+                '1' => 'Order in processing',
+                '2' => 'Delivery validation',
+                '3' => 'Sent to delivery service',
+                '4' => 'Order ready'
+            ]),
             HasMany::make('CartLines', 'items')
         ];
     }
