@@ -5,28 +5,37 @@ namespace App\Http\Controllers;
 use App\Http\Requests\Cart\StoreItemRequest;
 use App\Http\Resources\CartLineResource;
 use App\Http\Resources\CartResource;
+use App\Models\User;
+use Illuminate\Contracts\Auth\Authenticatable;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
+
 
 class CartController extends Controller
 {
     /**
      * Display a listing of the resource.
      *
+     * @param User $user
      * @return \Illuminate\Http\Resources\Json\AnonymousResourceCollection
      */
-    public function index()
+    public function index(Authenticatable $user)
     {
-        $carts = auth()->user()->carts();
-        if (!$carts->active()->count()) {
-            $carts->create();
+        $carts = $user->carts()->get();
+        if ($carts->isEmpty()) {
+            $carts->push($user->carts()->create());
         }
-        return CartResource::collection(auth()->user()->carts()->newestFirst()->get());
+        return CartResource::collection($carts);
     }
 
-    public function show($id)
+    /**
+     * @param User $user
+     * @param $id
+     * @return \Illuminate\Http\JsonResponse|\Illuminate\Http\Resources\Json\AnonymousResourceCollection
+     */
+    public function show(Authenticatable $user, $id)
     {
         try {
-            $cart = auth()->user()->carts()->findOrFail($id)->items;
+            $cart = $user->carts()->findOrFail($id)->items;
         } catch (ModelNotFoundException $e) {
             return response()->json(['success' => false, 'data' => [$e->getMessage()]], 400);
         }
@@ -36,13 +45,14 @@ class CartController extends Controller
     /**
      * Store a newly created resource in storage.
      *
+     * @param User $user
      * @param \Illuminate\Http\Request $request
-     * @return \Illuminate\Http\Response
+     * @return CartLineResource
      */
-    public function store(StoreItemRequest $request)
+    public function store(Authenticatable $user, StoreItemRequest $request)
     {
         try {
-            $cart = auth()->user()->carts()->active()->findOrFail($request->input('cart_id'));
+            $cart = $user->carts()->active()->findOrFail($request->input('cart_id'));
         } catch (ModelNotFoundException $e) {
             return response()->json(['success' => false, 'data' => [$e->getMessage()]], 400);
         }
@@ -53,13 +63,14 @@ class CartController extends Controller
     /**
      * Remove the specified resource from storage.
      *
+     * @param User $user
      * @param int $id
      * @return \Illuminate\Http\Response
      */
-    public function destroy($cart_id, $id)
+    public function destroy(Authenticatable $user, $cart_id, $id)
     {
         try {
-            $cart = auth()->user()->carts()->active()->findOrFail($cart_id);
+            $cart = $user->carts()->active()->findOrFail($cart_id);
             $cart->items()->findOrFail($id)->delete();
         } catch (ModelNotFoundException $e) {
             return response()->json(['success' => false, 'data' => [$e->getMessage()]], 400);
