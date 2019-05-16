@@ -8,12 +8,7 @@ use Illuminate\Foundation\Testing\RefreshDatabase;
 
 class RegisterTest extends TestCase
 {
-    use WithFaker;
-    /**
-     * A basic feature test example.
-     *
-     * @return void
-     */
+    use WithFaker, RefreshDatabase;
 
     protected function logout()
     {
@@ -35,8 +30,8 @@ class RegisterTest extends TestCase
         $name = $this->faker->name;
         $email = $this->faker->email;
         $password = $this->faker->password;
-        $this->sendRegisterData($name, $email, $password);
-        $this->assertAuthenticated();
+        $response = $this->sendRegisterData($name, $email, $password);
+        $response->assertRedirect();
     }
 
     public function testShortPassword()
