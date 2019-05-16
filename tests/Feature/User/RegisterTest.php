@@ -29,7 +29,7 @@ class RegisterTest extends TestCase
     {
         $name = $this->faker->name;
         $email = $this->faker->email;
-        $password = $this->faker->password;
+        $password = $this->faker->password(8);
         $response = $this->sendRegisterData($name, $email, $password);
         $response->assertRedirect();
     }

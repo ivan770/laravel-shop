@@ -1,16 +1,16 @@
 <?php
 
-namespace Tests\Feature\Category;
+namespace Tests\Feature\Cart;
 
 use App\Models\Category;
+use App\Models\Item;
 use App\Models\Subcategory;
 use App\Models\User;
 use Tests\TestCase;
 use Illuminate\Foundation\Testing\WithFaker;
 use Illuminate\Foundation\Testing\RefreshDatabase;
-use Laravel\Passport\Passport;
 
-class ListingTest extends TestCase
+abstract class BaseCart extends TestCase
 {
     use WithFaker, RefreshDatabase;
 
@@ -19,6 +19,11 @@ class ListingTest extends TestCase
      */
     protected $user;
 
+    /**
+     * @var Item $item
+     */
+    protected $item;
+
     public function setUp(): void
     {
         parent::setUp();
@@ -26,23 +31,6 @@ class ListingTest extends TestCase
         factory(Category::class)->create()->each(function (Category $category) {
             $category->subcategories()->save(factory(Subcategory::class)->make());
         });
-    }
-
-    protected function requestListing()
-    {
-        return $this->json('GET', '/api/category');
-    }
-
-    public function testListing()
-    {
-        Passport::actingAs($this->user);
-        $response = $this->requestListing();
-        $response->assertJsonStructure(["data" => [["id", "subcategories"]]]);
-    }
-
-    public function testWithoutAuth()
-    {
-        $response = $this->requestListing();
-        $response->assertStatus(401);
+        $this->item = Category::first()->subcategories()->first()->items()->save(factory(Item::class)->make());
     }
 }
