@@ -51,4 +51,16 @@ class StoreTest extends BaseCart
             ]
         ]);
     }
+
+    public function testInvalidCountStore()
+    {
+        $data = [
+            "cart_id" => $this->user->carts()->firstOrCreate([])->id,
+            "item_id" => $this->item->id,
+            "count" => 0
+        ];
+        Passport::actingAs($this->user, ['cart']);
+        $response = $this->requestStore($data);
+        $response->assertJsonValidationErrors(['count']);
+    }
 }
