@@ -18,13 +18,10 @@ class ItemController extends Controller
     public function index($id)
     {
         try {
-            $result = Subcategory::find($id);
-            if ($result == null) {
-                throw new ModelNotFoundException("Subcategory with that ID doesn't exist");
-            }
+            $result = Subcategory::findOrFail($id);
             $result = $result->items;
-        } catch (\Throwable $e) {
-            return response()->json(['success' => false, 'data' => [$e->getMessage()]], 400);
+        } catch (ModelNotFoundException $e) {
+            return response()->json(['success' => false, 'data' => [$e->getMessage()]], 404);
         }
         return ItemResource::collection($result);
     }
@@ -38,12 +35,9 @@ class ItemController extends Controller
     public function show($id)
     {
         try {
-            $result = Item::find($id);
-            if ($result == null) {
-                throw new ModelNotFoundException("Item with that ID doesn't exist");
-            }
-        } catch (\Throwable $e) {
-            return response()->json(['success' => false, 'data' => [$e->getMessage()]], 400);
+            $result = Item::findOrFail($id);
+        } catch (ModelNotFoundException $e) {
+            return response()->json(['success' => false, 'data' => [$e->getMessage()]], 404);
         }
         return ItemResource::make($result);
     }
