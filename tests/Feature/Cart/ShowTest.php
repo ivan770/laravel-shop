@@ -28,6 +28,6 @@ class ShowTest extends BaseCart
     {
         Passport::actingAs($this->user, ['cart']);
         $response = $this->requestShow(0);
-        $response->assertStatus(400);
+        $response->assertStatus(404);
     }
 }

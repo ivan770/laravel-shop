@@ -37,7 +37,7 @@ class CartController extends Controller
         try {
             $cart = $user->carts()->findOrFail($id)->items;
         } catch (ModelNotFoundException $e) {
-            return response()->json(['success' => false, 'data' => [$e->getMessage()]], 400);
+            return response()->json(['success' => false, 'data' => [$e->getMessage()]], 404);
         }
         return CartLineResource::collection($cart);
     }
@@ -54,7 +54,7 @@ class CartController extends Controller
         try {
             $cart = $user->carts()->active()->findOrFail($request->input('cart_id'));
         } catch (ModelNotFoundException $e) {
-            return response()->json(['success' => false, 'data' => [$e->getMessage()]], 400);
+            return response()->json(['success' => false, 'data' => [$e->getMessage()]], 404);
         }
         $item = $cart->items()->create(['item_id' => $request->input('item_id'), 'count' => $request->input('count', 1)]);
         return CartLineResource::make($item);
@@ -73,7 +73,7 @@ class CartController extends Controller
             $cart = $user->carts()->active()->findOrFail($cart_id);
             $cart->items()->findOrFail($id)->delete();
         } catch (ModelNotFoundException $e) {
-            return response()->json(['success' => false, 'data' => [$e->getMessage()]], 400);
+            return response()->json(['success' => false, 'data' => [$e->getMessage()]], 404);
         }
         return response()->json(['success' => true, 'data' => []]);
     }
