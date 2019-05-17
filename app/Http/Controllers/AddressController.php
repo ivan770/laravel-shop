@@ -4,6 +4,8 @@ namespace App\Http\Controllers;
 
 use App\Http\Requests\Address\CreateEditAddressRequest;
 use App\Http\Resources\AddressResource;
+use App\Models\User;
+use Illuminate\Contracts\Auth\Authenticatable;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
 
 class AddressController extends Controller
@@ -32,40 +34,36 @@ class AddressController extends Controller
     /**
      * Update the specified resource in storage.
      *
+     * @param User $user
      * @param CreateEditAddressRequest $request
      * @param int $id
      * @return AddressResource
      */
-    public function update(CreateEditAddressRequest $request, $id)
+    public function update(Authenticatable $user, CreateEditAddressRequest $request, $id)
     {
         try {
-            $result = auth()->user()->addresses()->find($id);
-            if ($result == null) {
-                throw new ModelNotFoundException("Saved address with provided ID doesn't exist");
-            }
-            $result->update($request->validated());
-        } catch (\Throwable $e) {
-            return response()->json(['success' => false, 'data' => [$e->getMessage()]], 400);
+            $address = $user->addresses()->findOrFail($id);
+            $result = tap($address)->update($request->validated());
+        } catch (ModelNotFoundException $e) {
+            return response()->json(['success' => false, 'data' => [$e->getMessage()]], 404);
         }
-        return response()->json(['success' => true, 'data' => []]);
+        return AddressResource::make($result);
     }
 
     /**
      * Remove the specified resource from storage.
      *
+     * @param User $user
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function destroy($id)
+    public function destroy(Authenticatable $user, $id)
     {
         try {
-            $result = auth()->user()->addresses()->find($id);
-            if ($result == null) {
-                throw new ModelNotFoundException("Saved address with provided ID doesn't exist");
-            }
+            $result = $user->addresses()->findOrFail($id);
             $result->delete();
-        } catch (\Throwable $e) {
-            return response()->json(['success' => false, 'data' => [$e->getMessage()]], 400);
+        } catch (ModelNotFoundException $e) {
+            return response()->json(['success' => false, 'data' => [$e->getMessage()]], 404);
         }
         return response()->json(['success' => true, 'data' => []]);
     }
