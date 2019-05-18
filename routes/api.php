@@ -38,6 +38,7 @@ Route::group(['middleware' => ['auth:api', 'scope:address']], function () {
 });
 
 Route::group(['middleware' => ['auth:api', 'scope:payment'], 'prefix' => 'payment'], function () {
+    Route::resource('cards', 'Payment\CardController')->only(['index', 'store', 'update', 'destroy']);
     Route::post('/checkout', 'PaymentController@checkout');
 });
 
