@@ -17,7 +17,7 @@ class StoreTest extends BaseAddress
             'region' => $this->faker->state,
             'city' => $this->faker->city,
             'street' => $this->faker->streetAddress,
-            'building' => $this->faker->buildingNumber,
+            'building' => $this->faker->randomDigitNotNull,
             'apartment' => $this->faker->randomDigitNotNull
         ];
     }
