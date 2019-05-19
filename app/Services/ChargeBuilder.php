@@ -6,8 +6,9 @@ namespace App\Services;
 
 use App\Models\Cart;
 use Illuminate\Database\Eloquent\Collection;
+use App\Contracts\ChargeBuilder as ChargeBuilderContract;
 
-class ChargeBuilder
+class ChargeBuilder implements ChargeBuilderContract
 {
     /**
      * @var Cart $cart

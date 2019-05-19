@@ -2,19 +2,19 @@
 
 namespace App\Http\Controllers\Payment;
 
-use App\Models\Address;
-use App\Services\ChargeBuilder;
-use App\Services\PaymentProcessor;
+use App\Contracts\ChargeBuilder;
+use App\Contracts\PaymentProcessor;
 use Illuminate\Contracts\Auth\Authenticatable;
 use App\Http\Controllers\Controller;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
 
 class ChargeController extends Controller
 {
-    public function charge(Authenticatable $user, ChargeBuilder $builder, PaymentProcessor $paymentProcessor, Address $address)
+    public function charge(Authenticatable $user, ChargeBuilder $builder, PaymentProcessor $paymentProcessor, $addrid)
     {
         try {
             $cart = $user->carts()->active()->firstOrFail();
+            $address = $user->addresses()->findOrFail($addrid);
         } catch (ModelNotFoundException $e) {
             return response()->json(['success' => false, 'data' => [$e->getMessage()]], 404);
         }

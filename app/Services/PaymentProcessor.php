@@ -5,8 +5,9 @@ namespace App\Services;
 use App\Models\Address;
 use App\Models\Cart;
 use App\Models\User;
+use App\Contracts\PaymentProcessor as PaymentProcessorContract;
 
-class PaymentProcessor
+class PaymentProcessor implements PaymentProcessorContract
 {
     /**
      * @var User $user
@@ -45,7 +46,7 @@ class PaymentProcessor
 
     public function transferCart()
     {
-        $this->cart->update(["delivery_status" => 1, "address" => $this->address->first()->toJson()]);
+        $this->cart->update(["delivery_status" => 1, "address" => $this->address->toJson()]);
         $this->user->carts()->create();
     }
 }

@@ -23,9 +23,7 @@ class RouteServiceProvider extends ServiceProvider
      */
     public function boot()
     {
-        Route::bind('addrid', function ($value) {
-            return auth()->user()->addresses()->find($value) ?? abort(404);
-        });
+        //
 
         parent::boot();
     }
