@@ -38,7 +38,7 @@ Route::group(['middleware' => ['auth:api', 'scope:address']], function () {
 
 Route::group(['middleware' => ['auth:api', 'scope:payment'], 'prefix' => 'payment'], function () {
     Route::resource('cards', 'Payment\CardController')->only(['index', 'store', 'update', 'destroy']);
-    Route::get('charge', 'Payment\ChargeController@charge');
+    Route::get('charge/{addrid}', 'Payment\ChargeController@charge');
 });
 
 Route::group(['middleware' => ['auth:api', 'scope:oauth', 'oauth'], 'prefix' => 'oauth'], function () {
