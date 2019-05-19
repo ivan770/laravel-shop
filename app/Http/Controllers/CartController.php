@@ -21,9 +21,6 @@ class CartController extends Controller
     public function index(Authenticatable $user)
     {
         $carts = $user->carts()->get();
-        if ($carts->isEmpty()) {
-            $carts->push($user->carts()->create());
-        }
         return CartResource::collection($carts);
     }
 
