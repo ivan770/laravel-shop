@@ -6,9 +6,9 @@ use Laravel\Passport\Passport;
 
 class DeleteTest extends BaseCart
 {
-    protected function requestDelete($cart_id, $id)
+    protected function requestDelete($id)
     {
-        return $this->json("DELETE", "/api/cart/{$cart_id}/{$id}");
+        return $this->json("DELETE", "/api/cart/{$id}");
     }
 
     public function testValidShow()
@@ -16,7 +16,7 @@ class DeleteTest extends BaseCart
         Passport::actingAs($this->user, ['cart']);
         $cart = $this->user->carts()->firstOrCreate([]);
         $item = $cart->items()->create(["item_id" => $this->item->id]);
-        $response = $this->requestDelete($cart->id, $item->id);
+        $response = $this->requestDelete($item->id);
         $response->assertJson([
             "success" => true
         ]);
@@ -27,16 +27,7 @@ class DeleteTest extends BaseCart
         Passport::actingAs($this->user, ['cart']);
         $cart = $this->user->carts()->firstOrCreate([]);
         $item = $cart->items()->create(["item_id" => $this->item->id]);
-        $response = $this->requestDelete($cart->id, 0);
-        $response->assertStatus(404);
-    }
-
-    public function testInvalidCartId()
-    {
-        Passport::actingAs($this->user, ['cart']);
-        $cart = $this->user->carts()->firstOrCreate([]);
-        $item = $cart->items()->create(["item_id" => $this->item->id]);
-        $response = $this->requestDelete(0, $item->id);
+        $response = $this->requestDelete(0);
         $response->assertStatus(404);
     }
 }

@@ -15,7 +15,7 @@ class IndexTest extends BaseCart
     {
         Passport::actingAs($this->user, ['cart']);
         $response = $this->requestIndex();
-        $response->assertJsonStructure(["data" => [['id', 'status']]]);
+        $response->assertJsonStructure(["data" => [['id', 'status', 'address']]]);
     }
 
     public function testUnauthenticated()

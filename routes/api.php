@@ -25,8 +25,7 @@ Route::group(['middleware' => 'auth:api'], function () {
 });
 
 Route::group(['middleware' => ['auth:api', 'scope:cart']], function () {
-    Route::resource('cart', 'CartController')->only(['index', 'show', 'store']);
-    Route::delete('/cart/{cart_id}/{id}', 'CartController@destroy');
+    Route::resource('cart', 'CartController')->only(['index', 'show', 'store', 'destroy']);
 });
 
 Route::group(['middleware' => ['auth:api', 'scope:wishlist']], function () {
@@ -39,7 +38,7 @@ Route::group(['middleware' => ['auth:api', 'scope:address']], function () {
 
 Route::group(['middleware' => ['auth:api', 'scope:payment'], 'prefix' => 'payment'], function () {
     Route::resource('cards', 'Payment\CardController')->only(['index', 'store', 'update', 'destroy']);
-    Route::post('/checkout', 'PaymentController@checkout');
+    Route::get('charge', 'Payment\ChargeController@charge');
 });
 
 Route::group(['middleware' => ['auth:api', 'scope:oauth', 'oauth'], 'prefix' => 'oauth'], function () {
