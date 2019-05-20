@@ -3,6 +3,7 @@
 namespace Tests\Unit\Payment;
 
 use App\Contracts\ChargeBuilder;
+use App\Exceptions\Payment\EmptyCartCharge;
 use App\Models\Cart;
 use App\Models\Category;
 use App\Models\Item;
@@ -26,6 +27,8 @@ class BuilderTest extends TestCase
      */
     protected $cart;
 
+    protected $emptyCart;
+
     protected $items;
 
     public function setUp() : void
@@ -33,6 +36,7 @@ class BuilderTest extends TestCase
         parent::setUp();
         $this->user = factory(User::class)->create();
         $this->cart = $this->user->carts()->create();
+        $this->emptyCart = $this->user->carts()->create();
         factory(Category::class)->create()->each(function (Category $category) {
             $category->subcategories()->save(factory(Subcategory::class)->make());
         });
@@ -46,7 +50,14 @@ class BuilderTest extends TestCase
     public function testValid()
     {
         $builder = app(ChargeBuilder::class);
-        $result = $builder->build($this->cart)->calculatePrices()->calculateTotal()->toResult();
+        $result = $builder->build($this->cart)->calculatePrices()->calculateTotal()->checkForEmptyCart()->toResult();
         $this->assertSame((float)$this->items->sum("price"), $result["total"]);
+    }
+
+    public function testEmpty()
+    {
+        $builder = app(ChargeBuilder::class);
+        $this->expectException(EmptyCartCharge::class);
+        $builder->build($this->emptyCart)->calculatePrices()->calculateTotal()->checkForEmptyCart()->toResult();
     }
 }
