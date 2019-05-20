@@ -10,6 +10,13 @@ use Illuminate\Database\Eloquent\ModelNotFoundException;
 
 class ChargeController extends Controller
 {
+    /**
+     * @param \App\Models\User $user
+     * @param \App\Services\ChargeBuilder $builder
+     * @param \App\Services\PaymentProcessor $paymentProcessor
+     * @param $addrid
+     * @return \Illuminate\Http\JsonResponse
+     */
     public function charge(Authenticatable $user, ChargeBuilder $builder, PaymentProcessor $paymentProcessor, $addrid)
     {
         try {
