@@ -26,11 +26,11 @@ class ChargeController extends Controller
         } catch (ModelNotFoundException $e) {
             return response()->json(['success' => false, 'data' => [$e->getMessage()]], 404);
         }
-        //TODO: Implement empty cart checks
         $draft = $builder
             ->build($cart)
             ->calculatePrices()
             ->calculateTotal()
+            ->checkForEmptyCart()
             ->toResult();
         try {
             $paymentProcessor

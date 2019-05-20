@@ -10,5 +10,7 @@ interface ChargeBuilder
 
     public function calculateTotal();
 
+    public function checkForEmptyCart();
+
     public function toResult();
 }

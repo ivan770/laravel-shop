@@ -4,6 +4,7 @@
 namespace App\Services;
 
 
+use App\Exceptions\Payment\EmptyCartCharge;
 use App\Models\Cart;
 use Illuminate\Database\Eloquent\Collection;
 use App\Contracts\ChargeBuilder as ChargeBuilderContract;
@@ -16,7 +17,7 @@ class ChargeBuilder implements ChargeBuilderContract
     protected $cart;
 
     /**
-     * @var Collection $prices;
+     * @var Collection $prices
      */
     protected $prices;
 
@@ -42,6 +43,14 @@ class ChargeBuilder implements ChargeBuilderContract
     public function calculateTotal()
     {
         $this->total = $this->prices->sum();
+        return $this;
+    }
+
+    public function checkForEmptyCart()
+    {
+        if (!$this->total) {
+            throw new EmptyCartCharge();
+        }
         return $this;
     }
 

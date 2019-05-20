@@ -15,6 +15,7 @@ class Handler extends ExceptionHandler
     protected $dontReport = [
         \Stripe\Error\Card::class,
         \Illuminate\Database\Eloquent\ModelNotFoundException::class,
+        \App\Exceptions\Payment\EmptyCartCharge::class
     ];
 
     /**
