@@ -7,6 +7,7 @@ use App\Contracts\PaymentProcessor;
 use Illuminate\Contracts\Auth\Authenticatable;
 use App\Http\Controllers\Controller;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
+use Stripe\Error\Card;
 
 class ChargeController extends Controller
 {
@@ -25,6 +26,7 @@ class ChargeController extends Controller
         } catch (ModelNotFoundException $e) {
             return response()->json(['success' => false, 'data' => [$e->getMessage()]], 404);
         }
+        //TODO: Implement empty cart checks
         $draft = $builder
             ->build($cart)
             ->calculatePrices()
@@ -35,7 +37,7 @@ class ChargeController extends Controller
                 ->build($user, $draft, $address, $cart)
                 ->charge()
                 ->transferCart();
-        } catch (\Throwable $e) {
+        } catch (Card $e) {
             return response()->json(['success' => false, 'data' => [$e->getMessage()]], 400);
         }
         return response()->json(['success' => true, 'data' => []]);
