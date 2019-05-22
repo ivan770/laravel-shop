@@ -5,6 +5,7 @@ namespace App\Nova;
 use Laravel\Nova\Fields\BelongsTo;
 use Laravel\Nova\Fields\ID;
 use Illuminate\Http\Request;
+use Laravel\Nova\Fields\Image;
 use Laravel\Nova\Fields\Number;
 use Laravel\Nova\Fields\Text;
 use Laravel\Nova\Fields\Textarea;
@@ -48,6 +49,7 @@ class Item extends Resource
             Text::make('Name'),
             Textarea::make('Short description'),
             Textarea::make('Description'),
+            Image::make('Image')->disk('public'),
             Number::make('Price'),
             BelongsTo::make('Subcategory')
         ];
