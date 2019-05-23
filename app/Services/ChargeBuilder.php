@@ -26,6 +26,16 @@ class ChargeBuilder implements ChargeBuilderContract
      */
     protected $total = 0;
 
+    public function constructOrder($cart)
+    {
+        return $this
+            ->build($cart)
+            ->calculatePrices()
+            ->calculateTotal()
+            ->checkForEmptyCart()
+            ->toResult();
+    }
+
     public function build($cart)
     {
         $this->cart = $cart;

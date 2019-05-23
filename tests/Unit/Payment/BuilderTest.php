@@ -50,7 +50,7 @@ class BuilderTest extends TestCase
     public function testValid()
     {
         $builder = app(ChargeBuilder::class);
-        $result = $builder->build($this->cart)->calculatePrices()->calculateTotal()->checkForEmptyCart()->toResult();
+        $result = $builder->constructOrder($this->cart);
         $this->assertSame((float)$this->items->sum("price"), $result["total"]);
     }
 
@@ -58,6 +58,6 @@ class BuilderTest extends TestCase
     {
         $builder = app(ChargeBuilder::class);
         $this->expectException(EmptyCartCharge::class);
-        $builder->build($this->emptyCart)->calculatePrices()->calculateTotal()->checkForEmptyCart()->toResult();
+        $builder->constructOrder($this->emptyCart);
     }
 }

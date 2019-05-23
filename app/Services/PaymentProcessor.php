@@ -26,6 +26,14 @@ class PaymentProcessor implements PaymentProcessorContract
      */
     protected $cart;
 
+    public function processPayment($user, $draft, $address, $cart)
+    {
+        return $this
+            ->build($user, $draft, $address, $cart)
+            ->charge()
+            ->transferCart();
+    }
+
     public function build($user, $draft, $address, $cart)
     {
         $this->user = $user;
@@ -37,7 +45,7 @@ class PaymentProcessor implements PaymentProcessorContract
 
     public function charge()
     {
-        $total = $this->draft["total"]*100;
+        $total = $this->draft["total"] * 100;
         $this->user->charge($total, [
             "description" => "Payment #{$this->cart->id}"
         ]);

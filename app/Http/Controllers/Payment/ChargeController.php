@@ -26,17 +26,9 @@ class ChargeController extends Controller
         } catch (ModelNotFoundException $e) {
             return response()->json(['success' => false, 'data' => [$e->getMessage()]], 404);
         }
-        $draft = $builder
-            ->build($cart)
-            ->calculatePrices()
-            ->calculateTotal()
-            ->checkForEmptyCart()
-            ->toResult();
+        $draft = $builder->constructOrder($cart);
         try {
-            $paymentProcessor
-                ->build($user, $draft, $address, $cart)
-                ->charge()
-                ->transferCart();
+            $paymentProcessor->processPayment($user, $draft, $address, $cart);
         } catch (Card $e) {
             return response()->json(['success' => false, 'data' => [$e->getMessage()]], 400);
         }

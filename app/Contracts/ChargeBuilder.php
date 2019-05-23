@@ -4,6 +4,8 @@ namespace App\Contracts;
 
 interface ChargeBuilder
 {
+    public function constructOrder($cart);
+
     public function build($cart);
 
     public function calculatePrices();
