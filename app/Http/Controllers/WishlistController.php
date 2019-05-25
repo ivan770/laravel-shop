@@ -25,7 +25,7 @@ class WishlistController extends Controller
      */
     public function store(StoreItemRequest $request)
     {
-        return response()->json(auth()->user()->wishlist()->syncWithoutDetaching($request->input('id')));
+        return response()->json(auth()->user()->wishlist()->syncWithoutDetaching($request->input('item_id')));
     }
 
     /**
