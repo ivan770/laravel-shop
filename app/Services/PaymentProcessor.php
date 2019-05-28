@@ -6,6 +6,7 @@ use App\Models\Address;
 use App\Models\Cart;
 use App\Models\User;
 use App\Contracts\PaymentProcessor as PaymentProcessorContract;
+use App\Notifications\Checkout;
 
 class PaymentProcessor implements PaymentProcessorContract
 {
@@ -26,12 +27,15 @@ class PaymentProcessor implements PaymentProcessorContract
      */
     protected $cart;
 
+    protected $stripeCharge;
+
     public function processPayment($user, $draft, $address, $cart)
     {
         return $this
             ->build($user, $draft, $address, $cart)
             ->charge()
-            ->transferCart();
+            ->transferCart()
+            ->notifyUser();
     }
 
     public function build($user, $draft, $address, $cart)
@@ -46,7 +50,7 @@ class PaymentProcessor implements PaymentProcessorContract
     public function charge()
     {
         $total = $this->draft["total"] * 100;
-        $this->user->charge($total, [
+        $this->stripeCharge = $this->user->charge($total, [
             "description" => "Payment #{$this->cart->id}"
         ]);
         return $this;
@@ -56,5 +60,11 @@ class PaymentProcessor implements PaymentProcessorContract
     {
         $this->cart->update(["delivery_status" => 1, "address" => $this->address->toJson()]);
         $this->user->carts()->create();
+        return $this;
+    }
+
+    public function notifyUser()
+    {
+        $this->user->notify(new Checkout($this->stripeCharge));
     }
 }
