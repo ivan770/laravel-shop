@@ -40,8 +40,3 @@ Route::group(['middleware' => ['auth:api', 'scope:payment'], 'prefix' => 'paymen
     Route::resource('cards', 'Payment\CardController')->only(['index', 'store', 'update', 'destroy']);
     Route::get('charge/{addrid}', 'Payment\ChargeController@charge');
 });
-
-Route::group(['middleware' => ['auth:api', 'scope:oauth', 'oauth'], 'prefix' => 'oauth'], function () {
-    Route::get('/redirect/{provider}', 'Auth\APIController@redirect');
-    Route::get('/callback/{provider}', 'Auth\APIController@callback');
-});

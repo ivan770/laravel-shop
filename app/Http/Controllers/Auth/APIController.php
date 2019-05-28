@@ -23,6 +23,6 @@ class APIController extends Controller
     {
         $user = $socialite->driver($provider)->stateless()->user();
         auth()->user()->update(["{$provider}_id" => $user->getId()]);
-        return response()->json(["success" => true]);
+        return redirect()->route('home');
     }
 }

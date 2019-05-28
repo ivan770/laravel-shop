@@ -47,7 +47,7 @@ return [
     'github' => [
         'client_id' => env('GITHUB_CLIENT_ID'),
         'client_secret' => env('GITHUB_CLIENT_SECRET'),
-        'redirect' => 'http://laravel-shop.test/api/oauth/callback/github',
+        'redirect' => 'http://laravel-shop.test/connect/callback/github',
     ],
 
     'providers' => ['github'],

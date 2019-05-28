@@ -14,7 +14,16 @@
                         </div>
                     @endif
 
-                    You are logged in!
+                    @if(($id = auth()->user()->github_id))
+                        GitHub account connected: {{ $id }}
+                    @else
+                        <form action="{{ route("redirect", ["provider" => "github"]) }}" method="GET">
+                            <button type="submit" class="btn btn-primary">
+                                Connect GitHub account
+                            </button>
+                        </form>
+                    @endif
+
                 </div>
             </div>
         </div>
