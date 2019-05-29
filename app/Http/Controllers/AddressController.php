@@ -4,12 +4,18 @@ namespace App\Http\Controllers;
 
 use App\Http\Requests\Address\CreateEditAddressRequest;
 use App\Http\Resources\AddressResource;
+use App\Models\Address;
 use App\Models\User;
 use Illuminate\Contracts\Auth\Authenticatable;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
 
 class AddressController extends Controller
 {
+    public function __construct()
+    {
+        $this->authorizeResource(Address::class);
+    }
+
     /**
      * Display a listing of the resource.
      *
@@ -39,14 +45,9 @@ class AddressController extends Controller
      * @param int $id
      * @return AddressResource
      */
-    public function update(Authenticatable $user, CreateEditAddressRequest $request, $id)
+    public function update(CreateEditAddressRequest $request, Address $address)
     {
-        try {
-            $address = $user->addresses()->findOrFail($id);
-            $result = tap($address)->update($request->validated());
-        } catch (ModelNotFoundException $e) {
-            return response()->json(['success' => false, 'data' => [$e->getMessage()]], 404);
-        }
+        $result = tap($address)->update($request->validated());
         return AddressResource::make($result);
     }
 
@@ -57,14 +58,9 @@ class AddressController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function destroy(Authenticatable $user, $id)
+    public function destroy(Address $address)
     {
-        try {
-            $result = $user->addresses()->findOrFail($id);
-            $result->delete();
-        } catch (ModelNotFoundException $e) {
-            return response()->json(['success' => false, 'data' => [$e->getMessage()]], 404);
-        }
+        $address->delete();
         return response()->json(['success' => true, 'data' => []]);
     }
 }
