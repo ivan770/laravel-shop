@@ -15,15 +15,9 @@ class ItemController extends Controller
      * @param $id
      * @return \Illuminate\Http\Resources\Json\AnonymousResourceCollection
      */
-    public function index($id)
+    public function index(Subcategory $subcategory)
     {
-        try {
-            $result = Subcategory::findOrFail($id);
-            $result = $result->items;
-        } catch (ModelNotFoundException $e) {
-            return response()->json(['success' => false, 'data' => [$e->getMessage()]], 404);
-        }
-        return ItemResource::collection($result);
+        return ItemResource::collection($subcategory->items);
     }
 
     /**
@@ -32,13 +26,8 @@ class ItemController extends Controller
      * @param int $id
      * @return ItemResource
      */
-    public function show($id)
+    public function show(Item $item)
     {
-        try {
-            $result = Item::findOrFail($id);
-        } catch (ModelNotFoundException $e) {
-            return response()->json(['success' => false, 'data' => [$e->getMessage()]], 404);
-        }
-        return ItemResource::make($result);
+        return ItemResource::make($item);
     }
 }
