@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Http\Requests\Cart\StoreItemRequest;
 use App\Http\Resources\CartLineResource;
 use App\Http\Resources\CartResource;
+use App\Models\Cart;
 use App\Models\User;
 use Illuminate\Contracts\Auth\Authenticatable;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
@@ -12,6 +13,11 @@ use Illuminate\Database\Eloquent\ModelNotFoundException;
 
 class CartController extends Controller
 {
+    public function __construct()
+    {
+        $this->authorizeResource(Cart::class);
+    }
+
     /**
      * Display a listing of the resource.
      *
@@ -25,18 +31,12 @@ class CartController extends Controller
     }
 
     /**
-     * @param User $user
-     * @param $id
+     * @param Cart $cart
      * @return \Illuminate\Http\JsonResponse|\Illuminate\Http\Resources\Json\AnonymousResourceCollection
      */
-    public function show(Authenticatable $user, $id)
+    public function show(Cart $cart)
     {
-        try {
-            $cart = $user->carts()->findOrFail($id)->items;
-        } catch (ModelNotFoundException $e) {
-            return response()->json(['success' => false, 'data' => [$e->getMessage()]], 404);
-        }
-        return CartLineResource::collection($cart);
+        return CartLineResource::collection($cart->items);
     }
 
     /**
