@@ -3,9 +3,17 @@
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
+use Laravel\Scout\Searchable;
 
 class Item extends Model
 {
+    use Searchable;
+
+    public function searchableAs()
+    {
+        return 'items_index';
+    }
+
     protected $guarded = [];
 
     public function subcategory()
