@@ -5,7 +5,7 @@ namespace App\Http\Controllers;
 use App\Http\Resources\ItemResource;
 use App\Models\Item;
 use App\Models\Subcategory;
-use Illuminate\Database\Eloquent\ModelNotFoundException;
+use Illuminate\Http\Request;
 
 class ItemController extends Controller
 {
@@ -29,5 +29,11 @@ class ItemController extends Controller
     public function show(Item $item)
     {
         return ItemResource::make($item);
+    }
+
+    public function search(Request $request)
+    {
+        $search = Item::search($request->input('query'))->take(50)->get();
+        return ItemResource::collection($search);
     }
 }

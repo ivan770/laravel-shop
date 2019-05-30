@@ -17,6 +17,7 @@ Route::middleware(['auth:api', 'scope:info'])->get('/user', 'Auth\APIController@
 
 Route::group(['middleware' => 'auth:api'], function () {
     Route::get('/item/{item}', 'ItemController@show');
+    Route::get('/items/search', 'ItemController@search');
     Route::get('/items/{subcategory}', 'ItemController@index');
 });
 
