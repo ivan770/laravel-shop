@@ -18,6 +18,13 @@ class CartController extends Controller
         $this->authorizeResource(Cart::class);
     }
 
+    protected function resourceAbilityMap()
+    {
+        return [
+            'show' => 'view'
+        ];
+    }
+
     /**
      * Display a listing of the resource.
      *
