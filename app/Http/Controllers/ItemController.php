@@ -36,9 +36,12 @@ class ItemController extends Controller
         return ItemResource::make($item);
     }
 
-    public function search(Request $request)
+    public function search(Repository $cache, Request $request)
     {
-        $search = Item::search($request->input('query'))->take(50)->get();
-        return ItemResource::collection($search);
+        $query = $request->input('query');
+        $result = $cache->remember("{$query}_search", Carbon::now()->addHour(), function () use ($query) {
+            return Item::search($query)->take(50)->get();
+        });
+        return ItemResource::collection($result);
     }
 }
