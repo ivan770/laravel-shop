@@ -21,7 +21,8 @@
         "laravel/telescope": "^2.0",
         "laravel/tinker": "^1.0",
         "sentry/sentry-laravel": "1.0.2",
-        "tamayo/laravel-scout-elastic": "^5.0"
+        "tamayo/laravel-scout-elastic": "^5.0",
+        "ivan770/laravel-firestore-cache": "dev-master"
     },
     "require-dev": {
         "beyondcode/laravel-dump-server": "^1.0",

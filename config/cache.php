@@ -84,6 +84,13 @@ return [
             'table' => env('DYNAMODB_CACHE_TABLE', 'cache'),
         ],
 
+        'firestore' => [
+            'driver' => 'firestore',
+            'id' => env('FIRESTORE_ID'),
+            'key' => env('GOOGLE_APPLICATION_CREDENTIALS'),
+            'collection' => env("FIRESTORE_COLLECTION", 'cache'),
+        ]
+
     ],
 
     /*
