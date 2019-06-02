@@ -10,8 +10,23 @@ class Category extends Model
 
     public $timestamps = false;
 
+    public function parent()
+    {
+        return $this->belongsTo(Category::class, 'parent_id');
+    }
+
     public function subcategories()
     {
-        return $this->belongsToMany(Subcategory::class);
+        return $this->hasMany(Category::class, 'parent_id');
+    }
+
+    public function allSubcategories()
+    {
+        return $this->subcategories()->with('allSubcategories');
+    }
+
+    public function items()
+    {
+        return $this->hasMany(Item::class);
     }
 }

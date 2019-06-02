@@ -23,7 +23,7 @@ class ItemResource extends JsonResource
             'short_description' => $this->short_description,
             'description' => $this->description,
             'price' => $this->price,
-            'subcategory_id' => $this->subcategory_id,
+            'category_id' => $this->category_id,
             'image' => $this->image ? $storage->disk('public')->url($this->image) : null,
         ];
     }

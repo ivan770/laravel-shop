@@ -3,8 +3,8 @@
 namespace App\Http\Controllers;
 
 use App\Http\Resources\ItemResource;
+use App\Models\Category;
 use App\Models\Item;
-use App\Models\Subcategory;
 use Carbon\Carbon;
 use Illuminate\Contracts\Cache\Repository;
 use Illuminate\Http\Request;
@@ -17,10 +17,10 @@ class ItemController extends Controller
      * @param $id
      * @return \Illuminate\Http\Resources\Json\AnonymousResourceCollection
      */
-    public function index(Repository $cache, Subcategory $subcategory)
+    public function index(Repository $cache, Category $category)
     {
-        $result = $cache->remember("{$subcategory->id}_items", Carbon::now()->addHour(), function () use ($subcategory) {
-            return $subcategory->items;
+        $result = $cache->remember("{$category->id}_items", Carbon::now()->addHour(), function () use ($category) {
+            return $category->items;
         });
         return ItemResource::collection($result);
     }

@@ -16,9 +16,9 @@ class Item extends Model
 
     protected $guarded = [];
 
-    public function subcategory()
+    public function category()
     {
-        return $this->belongsTo(Subcategory::class);
+        return $this->belongsTo(Category::class);
     }
 
     public function cartlines()

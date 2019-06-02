@@ -2,6 +2,8 @@
 
 namespace App\Nova;
 
+use Laravel\Nova\Fields\BelongsTo;
+use Laravel\Nova\Fields\HasMany;
 use Laravel\Nova\Fields\ID;
 use Illuminate\Http\Request;
 use Laravel\Nova\Fields\Text;
@@ -46,7 +48,9 @@ class Category extends Resource
             Text::make('Name')
                 ->sortable()
                 ->rules('required', 'max:255'),
-            BelongsToMany::make('Subcategories')
+            HasMany::make('Items'),
+            HasMany::make('Subcategories', 'subcategories', 'App\Nova\Category'),
+            BelongsTo::make('Category', 'parent')->nullable()
         ];
     }
 

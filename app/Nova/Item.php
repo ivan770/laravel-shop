@@ -51,7 +51,7 @@ class Item extends Resource
             Textarea::make('Description'),
             Image::make('Image')->disk('public'),
             Number::make('Price'),
-            BelongsTo::make('Subcategory')
+            BelongsTo::make('Category')
         ];
     }
 

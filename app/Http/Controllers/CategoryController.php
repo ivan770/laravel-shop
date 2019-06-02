@@ -14,6 +14,7 @@ class CategoryController extends Controller
      */
     public function index()
     {
+        //TODO: Cache nested categories
         $categories = Category::all();
         return CategoryResource::collection($categories);
     }
