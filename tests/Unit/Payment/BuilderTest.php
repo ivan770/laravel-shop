@@ -7,7 +7,6 @@ use App\Exceptions\Payment\EmptyCartCharge;
 use App\Models\Cart;
 use App\Models\Category;
 use App\Models\Item;
-use App\Models\Subcategory;
 use App\Models\User;
 use Tests\TestCase;
 use Illuminate\Foundation\Testing\WithFaker;
