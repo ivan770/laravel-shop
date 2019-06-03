@@ -29,9 +29,7 @@ abstract class BaseCart extends TestCase
         parent::setUp();
         $this->user = factory(User::class)->create();
         $this->user->carts()->create();
-        factory(Category::class)->create()->each(function (Category $category) {
-            $category->subcategories()->save(factory(Subcategory::class)->make());
-        });
-        $this->item = Category::first()->subcategories()->first()->items()->save(factory(Item::class)->make());
+        factory(Category::class)->create();
+        $this->item = Category::first()->items()->save(factory(Item::class)->make());
     }
 }

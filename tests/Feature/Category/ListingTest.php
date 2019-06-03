@@ -23,9 +23,7 @@ class ListingTest extends TestCase
     {
         parent::setUp();
         $this->user = factory(User::class)->create();
-        factory(Category::class)->create()->each(function (Category $category) {
-            $category->subcategories()->save(factory(Subcategory::class)->make());
-        });
+        factory(Category::class)->create();
     }
 
     protected function requestListing()
@@ -37,7 +35,7 @@ class ListingTest extends TestCase
     {
         Passport::actingAs($this->user);
         $response = $this->requestListing();
-        $response->assertJsonStructure(["data" => [["id", "subcategories"]]]);
+        $response->assertJsonStructure(["data" => [["id", "all_subcategories"]]]);
     }
 
     public function testWithoutAuth()
