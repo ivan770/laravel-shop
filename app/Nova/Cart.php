@@ -4,6 +4,7 @@ namespace App\Nova;
 
 use Inspheric\Fields\Indicator;
 use Laravel\Nova\Fields\Boolean;
+use Laravel\Nova\Fields\KeyValue;
 use Laravel\Nova\Fields\HasMany;
 use Laravel\Nova\Fields\ID;
 use Illuminate\Http\Request;
@@ -59,6 +60,7 @@ class Cart extends Resource
                 '3' => 'Sent to delivery service',
                 '4' => 'Order ready'
             ]),
+            KeyValue::make('Address')->nullable()->rules('json'),
             HasMany::make('CartLines', 'items')
         ];
     }

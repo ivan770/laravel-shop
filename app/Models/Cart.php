@@ -8,6 +8,10 @@ class Cart extends Model
 {
     protected $guarded = [];
 
+    protected $casts = [
+        'address' => 'array'
+    ];
+
     public $timestamps = false;
 
     public function user()
