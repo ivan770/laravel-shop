@@ -96,4 +96,9 @@ class Address extends Resource
     {
         return [];
     }
+
+    public static function authorizable()
+    {
+        return false;
+    }
 }
