@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Http\Resources\CategoryResource;
 use App\Models\Category;
+use Illuminate\Cache\Repository;
 
 class CategoryController extends Controller
 {
@@ -12,10 +13,11 @@ class CategoryController extends Controller
      *
      * @return \Illuminate\Http\Resources\Json\AnonymousResourceCollection
      */
-    public function index()
+    public function index(Repository $cache)
     {
-        //TODO: Cache nested categories
-        $categories = Category::all();
+        $categories = $cache->remember("categories", now()->addHour(), function () {
+            return Category::all();
+        });
         return CategoryResource::collection($categories);
     }
 }
